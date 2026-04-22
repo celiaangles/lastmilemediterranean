@@ -29,8 +29,62 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
+## Sanity CMS
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Content is managed with Sanity. Schemas live in `sanity/schemas/` and map 1:1 to homepage sections.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### First-time setup
+
+1. Create a project at [sanity.io/manage](https://sanity.io/manage) and copy the **Project ID**.
+2. Copy env template and fill in values:
+   ```bash
+   cp .env.local.example .env.local
+   # fill in NEXT_PUBLIC_SANITY_PROJECT_ID and NEXT_PUBLIC_SANITY_DATASET
+   ```
+3. In the Sanity dashboard, add `http://localhost:3000` and your production URL to **API → CORS origins** (credentials allowed).
+4. Run the dev server and open the embedded Studio:
+   ```bash
+   npm run dev
+   # then visit http://localhost:3000/studio
+   ```
+
+### Schema map
+
+| Homepage section            | Schema file                                             |
+| --------------------------- | ------------------------------------------------------- |
+| Hero                        | `sanity/schemas/objects/hero.ts`                        |
+| Sobre Nosotros / Propósito  | `sanity/schemas/objects/aboutSection.ts`                |
+| Stats (entregas, km…)       | `sanity/schemas/objects/statsSection.ts`                |
+| Nuestros Servicios          | `sanity/schemas/objects/servicesSection.ts`             |
+| Flota                       | `sanity/schemas/objects/fleetSection.ts`                |
+| Testimonials                | `sanity/schemas/objects/testimonialsSection.ts`         |
+| Preguntas Frecuentes        | `sanity/schemas/objects/faqSection.ts`                  |
+| Últimas Notícias (teaser)   | `sanity/schemas/objects/blogSection.ts`                 |
+| Blog Posts (repeatable)     | `sanity/schemas/documents/blogPost.ts`                  |
+| Header / footer / socials   | `sanity/schemas/singletons/siteSettings.ts`             |
+| Page composition            | `sanity/schemas/singletons/homePage.ts`                 |
+
+### Fetching content in a page
+
+```tsx
+import { client } from "@/sanity/lib/client";
+import { homePageQuery } from "@/sanity/lib/queries";
+
+export default async function Home() {
+  const data = await client.fetch(homePageQuery);
+  return <Hero {...data.hero} />;
+}
+```
+
+## Deploy to GitHub → Vercel
+
+1. `git init && git add . && git commit -m "initial"`
+2. Push to a new GitHub repo.
+3. Import the repo on [vercel.com/new](https://vercel.com/new).
+4. In Vercel → Project Settings → **Environment Variables**, add:
+   - `NEXT_PUBLIC_SANITY_PROJECT_ID`
+   - `NEXT_PUBLIC_SANITY_DATASET` (typically `production`)
+   - `NEXT_PUBLIC_SANITY_API_VERSION` (e.g. `2024-10-01`)
+   - `SANITY_API_READ_TOKEN` (optional, for drafts)
+5. Add your Vercel production URL to Sanity **CORS origins**.
+6. Deploy. The Studio will be live at `https://your-domain.vercel.app/studio`.
