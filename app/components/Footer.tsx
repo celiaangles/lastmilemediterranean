@@ -45,7 +45,7 @@ export function Footer({
     footerColumns && footerColumns.length > 0 ? footerColumns : defaultColumns;
 
   return (
-    <footer className="bg-black text-white border-t border-[var(--border-subtle)]">
+    <footer className="text-white border-t border-[var(--border-subtle)]" style={{ backgroundColor: "#252929" }}>
       <div className="container-x py-14 md:py-16">
         <div className="grid md:grid-cols-2 gap-10">
           <div>
@@ -56,7 +56,7 @@ export function Footer({
             {cols.map((col, i) => (
               <div key={i}>
                 {col.title && (
-                  <div className="text-[11px] tracking-[0.18em] font-semibold text-white/50 mb-3">
+                  <div className="text-[11px] tracking-[0.18em] font-medium text-white/50 mb-3">
                     {col.title}
                   </div>
                 )}

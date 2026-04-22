@@ -84,11 +84,11 @@ export default async function ServiceDetailPage({
               ← Volver a servicios
             </Link>
             {service.temperatureRange && (
-              <div className="text-[11px] tracking-[0.2em] text-[var(--brand-blue-accent)] font-semibold mb-4">
+              <div className="text-[11px] tracking-[0.2em] text-[var(--brand-blue-accent)] font-medium mb-4">
                 {service.temperatureRange}
               </div>
             )}
-            <h1 className="text-4xl md:text-[64px] font-semibold leading-[1.05] tracking-tight max-w-3xl">
+            <h1 className="text-4xl md:text-[64px] font-medium leading-[1.05] tracking-tight max-w-3xl">
               {service.title}
             </h1>
             {service.shortDescription && (
@@ -114,7 +114,7 @@ export default async function ServiceDetailPage({
           <div className="container-x grid md:grid-cols-3 gap-10">
             <div className="md:col-span-2 prose-invert">
               {service.longDescription ? (
-                <div className="space-y-4 text-[15px] md:text-base text-white/85 leading-relaxed [&_h2]:text-2xl [&_h2]:font-semibold [&_h2]:text-white [&_h2]:mt-10 [&_h2]:mb-3 [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:text-white [&_h3]:mt-8 [&_h3]:mb-2 [&_a]:text-[var(--brand-blue-accent)] [&_a]:underline [&_strong]:text-white [&_ul]:list-disc [&_ul]:pl-6 [&_ol]:list-decimal [&_ol]:pl-6">
+                <div className="space-y-4 text-[15px] md:text-base text-white/85 leading-relaxed [&_h2]:text-2xl [&_h2]:font-medium [&_h2]:text-white [&_h2]:mt-10 [&_h2]:mb-3 [&_h3]:text-xl [&_h3]:font-medium [&_h3]:text-white [&_h3]:mt-8 [&_h3]:mb-2 [&_a]:text-[var(--brand-blue-accent)] [&_a]:underline [&_strong]:text-white [&_ul]:list-disc [&_ul]:pl-6 [&_ol]:list-decimal [&_ol]:pl-6">
                   <PortableText value={service.longDescription} />
                 </div>
               ) : (
@@ -128,7 +128,7 @@ export default async function ServiceDetailPage({
             <aside className="md:col-span-1">
               {service.features && service.features.length > 0 && (
                 <div className="rounded-2xl bg-[var(--surface-card)] border border-[var(--border-subtle)] p-6">
-                  <div className="text-[11px] tracking-[0.18em] font-semibold text-white/60 mb-4">
+                  <div className="text-[11px] tracking-[0.18em] font-medium text-white/60 mb-4">
                     CARACTERÍSTICAS
                   </div>
                   <ul className="space-y-3">

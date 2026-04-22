@@ -33,7 +33,7 @@ export function Header({ navLinks, cta }: Props) {
               <Link
                 key={i}
                 href={l.href || "#"}
-                className="text-[14px] text-white/90 hover:text-white transition-colors"
+                className="text-[18px] text-white/90 hover:text-white transition-colors"
               >
                 {l.label}
               </Link>
@@ -46,7 +46,7 @@ export function Header({ navLinks, cta }: Props) {
           href={ctaHref}
           className="flex items-center gap-3 rounded-[8px] bg-[#0f0f10] border border-white/[0.06] pl-6 pr-2 py-2 text-white hover:bg-[#17171a] transition-colors"
         >
-          <span className="text-[14px]">{ctaLabel}</span>
+          <span className="text-[18px]">{ctaLabel}</span>
           <span className="flex items-center justify-center h-10 w-10 rounded-xl bg-[var(--brand-blue)] text-white">
             <ArrowUpRight className="h-[16px] w-[16px]" />
           </span>

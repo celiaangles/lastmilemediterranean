@@ -54,7 +54,7 @@ export function FAQ({ heading = "Preguntas Frecuentes", items }: Props) {
   return (
     <section className="bg-[var(--brand-blue)] text-white">
       <div className="container-x py-20 md:py-24">
-        <h2 className="text-3xl md:text-[44px] font-semibold leading-tight tracking-tight mb-10">
+        <h2 className="text-3xl md:text-[44px] font-medium leading-tight tracking-tight mb-10">
           {heading}
         </h2>
         <div className="space-y-2.5">

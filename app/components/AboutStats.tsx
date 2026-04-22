@@ -34,35 +34,37 @@ export function AboutStats({ about, stats }: Props) {
     stats?.stats && stats.stats.length > 0 ? stats.stats : defaultStats;
 
   return (
-    <section className="bg-[var(--brand-blue)] text-white">
-      <div className="container-x py-16 md:py-20">
-        <div className="grid md:grid-cols-2 gap-10 md:gap-14">
+    <section className="bg-[var(--brand-blue)] text-white min-h-screen flex flex-col">
+      <div className="flex-1 px-6 md:px-[60px] pt-16 md:pt-20">
+        <div className="flex flex-col gap-10">
           <div>
-            <div className="text-[11px] tracking-[0.18em] text-white/85 font-semibold mb-4">
+            <div className="text-[18px] tracking-normal text-white/85 font-medium mb-4">
               {a.aboutEyebrow}
             </div>
-            <p className="text-[15px] md:text-base leading-[1.65] text-white">
+            <p className="text-[24px] leading-[1.45] text-white font-medium">
               {a.aboutBody}
             </p>
           </div>
           <div>
-            <div className="text-[11px] tracking-[0.18em] text-white/85 font-semibold mb-4">
+            <div className="text-[18px] tracking-normal text-white/85 font-medium mb-4">
               {a.purposeEyebrow}
             </div>
-            <p className="text-[15px] md:text-base leading-[1.65] text-white">
+            <p className="text-[24px] leading-[1.45] text-white font-medium">
               {a.purposeBody}
             </p>
           </div>
         </div>
+      </div>
 
-        <div className="mt-14 md:mt-16 border-t border-white/25 pt-10 md:pt-12">
+      <div className="px-6 md:px-[60px] pb-16 md:pb-20">
+        <div className="border-t border-white/25 pt-10 md:pt-12">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {s.map((stat, i) => (
               <div key={i}>
-                <div className="text-4xl md:text-5xl font-semibold tracking-tight">
+                <div className="text-[42px] md:text-[64px] font-medium tracking-tight">
                   {stat.value}
                 </div>
-                <div className="mt-2 text-[11px] tracking-[0.18em] text-white/90 font-semibold">
+                <div className="mt-2 text-[11px] tracking-[0.18em] text-white/90 font-medium">
                   {stat.label}
                 </div>
               </div>

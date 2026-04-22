@@ -11,6 +11,7 @@ import { blogSection } from "./objects/blogSection";
 
 import { service } from "./documents/service";
 import { blogPost } from "./documents/blogPost";
+import { testimonial } from "./documents/testimonial";
 
 import { siteSettings } from "./singletons/siteSettings";
 import { homePage } from "./singletons/homePage";
@@ -26,6 +27,7 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   blogSection,
   service,
   blogPost,
+  testimonial,
   siteSettings,
   homePage,
 ];

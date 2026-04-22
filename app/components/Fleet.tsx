@@ -38,7 +38,7 @@ export function Fleet({
     <section className="bg-[var(--surface-dark)] text-white">
       <div className="container-x py-20 md:py-24">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-10">
-          <h2 className="text-3xl md:text-[44px] font-semibold leading-[1.15] tracking-tight">
+          <h2 className="text-3xl md:text-[44px] font-medium leading-[1.15] tracking-tight">
             {heading}
             {headingHighlighted && (
               <>

@@ -1,5 +1,7 @@
+"use client";
+
+import { useEffect, useRef, useState, useCallback } from "react";
 import Link from "next/link";
-import { ArrowUpRight } from "./icons";
 import { urlFor } from "@/sanity/lib/image";
 type SanityImageSource = Parameters<typeof urlFor>[0];
 
@@ -43,6 +45,22 @@ const defaultList: Testimonial[] = [
   },
 ];
 
+function ArrowLeft({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+      <path d="M19 12H5M12 19l-7-7 7-7" />
+    </svg>
+  );
+}
+
+function ArrowRight({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+      <path d="M5 12h14M12 5l7 7-7 7" />
+    </svg>
+  );
+}
+
 export function Testimonials({
   heading = "Empresas Que",
   headingHighlighted = "Confían en Nosotros",
@@ -53,11 +71,123 @@ export function Testimonials({
   const list =
     testimonials && testimonials.length > 0 ? testimonials : defaultList;
 
+  const trackRef = useRef<HTMLDivElement>(null);
+  const [active, setActive] = useState(0);
+  const isResetting = useRef(false);
+  const count = list.length;
+
+  const extendedList = [...list, ...list, ...list];
+
+  // On mount, scroll to the start of the real set (index = count) without animation
+  useEffect(() => {
+    const el = trackRef.current;
+    if (!el) return;
+    const card = el.children[count] as HTMLElement | undefined;
+    if (card) {
+      el.scrollTo({ left: card.offsetLeft - 60, behavior: "instant" });
+    }
+  }, [count]);
+
+  useEffect(() => {
+    const el = trackRef.current;
+    if (!el) return;
+    const onScroll = () => {
+      if (isResetting.current) return;
+      const cards = Array.from(el.children) as HTMLElement[];
+      if (cards.length === 0) return;
+      const center = el.scrollLeft + el.clientWidth / 2;
+      let closest = 0;
+      let min = Infinity;
+      cards.forEach((c, i) => {
+        const cardCenter = c.offsetLeft + c.clientWidth / 2;
+        const d = Math.abs(cardCenter - center);
+        if (d < min) {
+          min = d;
+          closest = i;
+        }
+      });
+      setActive(closest % count);
+    };
+    el.addEventListener("scroll", onScroll, { passive: true });
+    return () => el.removeEventListener("scroll", onScroll);
+  }, [count]);
+
+  // After a smooth scroll ends, silently reset to the real set if we're in a clone region
+  useEffect(() => {
+    const el = trackRef.current;
+    if (!el) return;
+    const onScrollEnd = () => {
+      if (isResetting.current) return;
+      const cards = Array.from(el.children) as HTMLElement[];
+      if (cards.length === 0) return;
+      const center = el.scrollLeft + el.clientWidth / 2;
+      let closest = 0;
+      let min = Infinity;
+      cards.forEach((c, i) => {
+        const cardCenter = c.offsetLeft + c.clientWidth / 2;
+        const d = Math.abs(cardCenter - center);
+        if (d < min) {
+          min = d;
+          closest = i;
+        }
+      });
+      if (closest < count || closest >= 2 * count) {
+        const realIndex = closest % count;
+        const realCard = cards[realIndex + count] as HTMLElement | undefined;
+        if (realCard) {
+          isResetting.current = true;
+          el.scrollTo({ left: realCard.offsetLeft - 60, behavior: "instant" });
+          requestAnimationFrame(() => {
+            isResetting.current = false;
+          });
+        }
+      }
+    };
+    el.addEventListener("scrollend", onScrollEnd);
+    return () => el.removeEventListener("scrollend", onScrollEnd);
+  }, [count]);
+
+  const scrollTo = useCallback((i: number) => {
+    const el = trackRef.current;
+    if (!el) return;
+    const card = el.children[i] as HTMLElement | undefined;
+    if (!card) return;
+    el.scrollTo({ left: card.offsetLeft - 60, behavior: "smooth" });
+  }, []);
+
+  const findCurrentExtended = useCallback(() => {
+    const el = trackRef.current;
+    if (!el) return count;
+    const cards = Array.from(el.children) as HTMLElement[];
+    const center = el.scrollLeft + el.clientWidth / 2;
+    let closest = count;
+    let min = Infinity;
+    cards.forEach((c, i) => {
+      const cardCenter = c.offsetLeft + c.clientWidth / 2;
+      const d = Math.abs(cardCenter - center);
+      if (d < min) {
+        min = d;
+        closest = i;
+      }
+    });
+    return closest;
+  }, [count]);
+
+  const scrollPrev = useCallback(() => {
+    const current = findCurrentExtended();
+    scrollTo(current - 1);
+  }, [findCurrentExtended, scrollTo]);
+
+  const scrollNext = useCallback(() => {
+    const current = findCurrentExtended();
+    scrollTo(current + 1);
+  }, [findCurrentExtended, scrollTo]);
+
   return (
     <section className="bg-[var(--surface-dark)] text-white">
-      <div className="container-x py-20 md:py-24 border-t border-[var(--border-subtle)]">
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-10">
-          <h2 className="text-3xl md:text-[44px] font-semibold leading-[1.15] tracking-tight">
+      <div className="py-20 md:py-24 border-t border-[var(--border-subtle)]">
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-10 px-6 md:px-[60px]">
+          <h2 className="text-3xl md:text-[44px] font-medium leading-[1.15] tracking-tight">
             {heading}
             {headingHighlighted && (
               <>
@@ -68,26 +198,46 @@ export function Testimonials({
               </>
             )}
           </h2>
-          <Link
-            href={ctaHref}
-            className="inline-flex items-center gap-2 rounded-full bg-[var(--surface-card)] border border-[var(--border-subtle)] px-4 py-2.5 text-[13px] text-white hover:bg-[var(--surface-card-2)] transition-colors self-start md:self-auto"
-          >
-            {ctaLabel}
-            <ArrowUpRight />
-          </Link>
+          <div className="flex items-center gap-3 self-start md:self-auto">
+            <Link
+              href={ctaHref}
+              className="inline-flex items-center gap-4 rounded-lg bg-white/5 border border-white/60 px-5 py-4 text-base font-medium text-white hover:bg-white/10 transition-colors"
+            >
+              {ctaLabel}
+              <ArrowRight className="h-5 w-5" />
+            </Link>
+            <button
+              onClick={scrollPrev}
+              aria-label="Anterior"
+              className="flex items-center justify-center h-[57px] w-[57px] rounded-lg bg-white/5 border border-white/60 text-white hover:bg-white/10 transition-colors"
+            >
+              <ArrowLeft className="h-5 w-5" />
+            </button>
+            <button
+              onClick={scrollNext}
+              aria-label="Siguiente"
+              className="flex items-center justify-center h-[57px] w-[57px] rounded-lg bg-white/5 border border-white/60 text-white hover:bg-white/10 transition-colors"
+            >
+              <ArrowRight className="h-5 w-5" />
+            </button>
+          </div>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-5">
-          {list.slice(0, 3).map((t, i) => {
+        <div
+          ref={trackRef}
+          className="flex gap-5 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-2 px-6 md:px-[60px] no-scrollbar"
+        >
+          {extendedList.map((t, i) => {
             const logoUrl = t.brandLogo
               ? urlFor(t.brandLogo).width(400).url()
               : null;
             return (
               <article
-                key={i}
-                className="rounded-2xl bg-[var(--surface-card)] border border-[var(--border-subtle)] p-6 md:p-7 flex flex-col"
+                key={`${i}`}
+                className="snap-start shrink-0 w-[85%] md:w-[348px] rounded-2xl border border-white/20 p-[21px] flex flex-col gap-[7px]"
+                style={{ backgroundColor: "#252929", height: 356 }}
               >
-                <div className="h-10 flex items-center mb-5">
+                <div className="h-10 flex items-center">
                   {logoUrl ? (
                     <img
                       src={logoUrl}
@@ -103,8 +253,8 @@ export function Testimonials({
                 <p className="text-[14px] leading-relaxed text-white/85 flex-1">
                   {t.quote}
                 </p>
-                <div className="mt-6">
-                  <div className="text-[14px] font-semibold text-white">
+                <div className="mt-auto">
+                  <div className="text-[14px] font-medium text-white">
                     {t.author}
                   </div>
                   {t.role && (
@@ -119,9 +269,18 @@ export function Testimonials({
         </div>
 
         <div className="mt-8 flex justify-center gap-1.5">
-          <span className="h-1.5 w-6 rounded-full bg-white/80" />
-          <span className="h-1.5 w-1.5 rounded-full bg-white/30" />
-          <span className="h-1.5 w-1.5 rounded-full bg-white/30" />
+          {list.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => scrollTo(i + count)}
+              aria-label={`Ir a testimonio ${i + 1}`}
+              className={`h-1.5 rounded-full transition-all ${
+                active === i
+                  ? "w-6 bg-white/90"
+                  : "w-1.5 bg-white/30 hover:bg-white/50"
+              }`}
+            />
+          ))}
         </div>
       </div>
     </section>

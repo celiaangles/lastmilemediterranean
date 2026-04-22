@@ -54,10 +54,10 @@ export default async function ServiciosPage() {
       <main>
         <section className="bg-[var(--surface-dark)] text-white pt-32 md:pt-40 pb-10">
           <div className="container-x">
-            <div className="text-[11px] tracking-[0.2em] text-white/60 font-semibold mb-4">
+            <div className="text-[11px] tracking-[0.2em] text-white/60 font-medium mb-4">
               NUESTROS SERVICIOS
             </div>
-            <h1 className="text-4xl md:text-[64px] font-semibold leading-[1.05] tracking-tight max-w-3xl">
+            <h1 className="text-4xl md:text-[64px] font-medium leading-[1.05] tracking-tight max-w-3xl">
               Transporte{" "}
               <span className="text-[var(--brand-blue-accent)]">
                 Especializado
@@ -107,11 +107,11 @@ export default async function ServiciosPage() {
                       />
                       <div className="p-6 flex-1 flex flex-col">
                         {s.temperatureRange && (
-                          <div className="text-[11px] tracking-[0.18em] font-semibold text-[var(--brand-blue-accent)] mb-2">
+                          <div className="text-[11px] tracking-[0.18em] font-medium text-[var(--brand-blue-accent)] mb-2">
                             {s.temperatureRange}
                           </div>
                         )}
-                        <h3 className="text-xl font-semibold group-hover:text-[var(--brand-blue-accent)] transition-colors">
+                        <h3 className="text-xl font-medium group-hover:text-[var(--brand-blue-accent)] transition-colors">
                           {s.title}
                         </h3>
                         {s.shortDescription && (

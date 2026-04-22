@@ -17,7 +17,12 @@ type Props = {
 
 const titleComponents: PortableTextComponents = {
   block: {
-    normal: ({ children }) => <>{children}</>,
+    normal: ({ children, index }) => (
+      <>
+        {index > 0 && <br />}
+        {children}
+      </>
+    ),
   },
   marks: {
     highlight: ({ children }) => (
@@ -58,7 +63,7 @@ export function Hero({
       <div className="relative z-10 px-[60px] pb-[60px] w-full">
         <div className="grid md:grid-cols-2 gap-0 items-end">
           <div>
-            <h1 className="text-white font-semibold leading-[1.05] tracking-tight text-[44px] md:text-[64px]">
+            <h1 className="text-white font-medium leading-[1.05] tracking-tight text-[42px] md:text-[64px]">
               {title ? (
                 <PortableText value={title} components={titleComponents} />
               ) : (
@@ -72,7 +77,7 @@ export function Hero({
           <div className="flex md:justify-end">
             <Link
               href={ctaHref}
-              className="inline-flex items-center gap-2 rounded-full bg-black/80 backdrop-blur px-5 py-3 text-sm font-medium text-white border border-white/10 hover:bg-black transition-colors"
+              className="inline-flex items-center gap-4 rounded-lg bg-white/5 px-5 py-4 text-base font-medium text-white border border-white hover:bg-white/10 transition-colors"
             >
               {ctaLabel}
               <ArrowUpRight />

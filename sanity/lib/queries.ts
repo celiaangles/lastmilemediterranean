@@ -29,7 +29,7 @@ export const homePageQuery = groq`*[_type == "homePage"][0]{
   },
   testimonials{
     heading, headingHighlighted, ctaLabel, ctaHref,
-    testimonials[]{ quote, author, role, brandLogo }
+    testimonials[]->{ _id, quote, author, role, brandLogo }
   },
   faq,
   blog{

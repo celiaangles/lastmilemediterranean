@@ -36,38 +36,8 @@ export const testimonialsSection = defineType({
       type: "array",
       of: [
         defineArrayMember({
-          type: "object",
-          name: "testimonial",
-          fields: [
-            defineField({
-              name: "quote",
-              title: "Quote",
-              type: "text",
-              rows: 5,
-              validation: (r) => r.required(),
-            }),
-            defineField({
-              name: "author",
-              title: "Author",
-              type: "string",
-              validation: (r) => r.required(),
-            }),
-            defineField({
-              name: "role",
-              title: "Role / Company",
-              type: "string",
-              description: 'e.g. "CEO y Copropietario, Frutas Caimari"',
-            }),
-            defineField({
-              name: "brandLogo",
-              title: "Brand Logo",
-              type: "image",
-              options: { hotspot: true },
-            }),
-          ],
-          preview: {
-            select: { title: "author", subtitle: "role", media: "brandLogo" },
-          },
+          type: "reference",
+          to: [{ type: "testimonial" }],
         }),
       ],
     }),
