@@ -1,20 +1,33 @@
 import Link from "next/link";
+import { PortableText, PortableTextComponents } from "next-sanity";
 import { ArrowUpRight } from "./icons";
 import { urlFor } from "@/sanity/lib/image";
 type SanityImageSource = Parameters<typeof urlFor>[0];
 
+/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+type PortableTextBlock = any;
+
 type Props = {
-  title?: string;
-  highlightedWord?: string;
+  title?: PortableTextBlock[];
   subtitle?: string;
   ctaLabel?: string;
   ctaHref?: string;
   backgroundImage?: SanityImageSource;
 };
 
+const titleComponents: PortableTextComponents = {
+  block: {
+    normal: ({ children }) => <>{children}</>,
+  },
+  marks: {
+    highlight: ({ children }) => (
+      <span className="text-[var(--brand-blue-accent)]">{children}</span>
+    ),
+  },
+};
+
 export function Hero({
-  title = "Tu Partner Logístico de",
-  highlightedWord = "Última Milla",
+  title,
   subtitle = "Conectamos tu negocio con cada rincón del Mediterráneo. Desde Mallorca hasta la península, cada kilómetro importa.",
   ctaLabel = "Contacta un Experto",
   ctaHref = "/contacto",
@@ -46,14 +59,10 @@ export function Hero({
         <div className="grid md:grid-cols-2 gap-0 items-end">
           <div>
             <h1 className="text-white font-semibold leading-[1.05] tracking-tight text-[44px] md:text-[64px]">
-              {title}
-              {highlightedWord && (
-                <>
-                  {" "}
-                  <span className="text-[var(--brand-blue-accent)]">
-                    {highlightedWord}
-                  </span>
-                </>
+              {title ? (
+                <PortableText value={title} components={titleComponents} />
+              ) : (
+                "Tu Partner Logístico de Última Milla"
               )}
             </h1>
             <p className="mt-[20px] max-w-xl text-[18px] leading-[1.35] text-white/85">

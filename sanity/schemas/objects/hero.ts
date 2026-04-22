@@ -8,17 +8,27 @@ export const hero = defineType({
     defineField({
       name: "title",
       title: "Title",
-      type: "string",
-      description: 'Plain part of the title, e.g. "Tu Partner Logístico de"',
-      initialValue: "Tu Partner Logístico de",
+      type: "array",
+      description:
+        'Write the full title and select words to mark as "highlight" for the blue accent color.',
+      of: [
+        {
+          type: "block",
+          styles: [{ title: "Normal", value: "normal" }],
+          lists: [],
+          marks: {
+            decorators: [
+              {
+                title: "Highlight",
+                value: "highlight",
+                icon: () => "H",
+              },
+            ],
+            annotations: [],
+          },
+        },
+      ],
       validation: (r) => r.required(),
-    }),
-    defineField({
-      name: "highlightedWord",
-      title: "Highlighted Word (blue)",
-      type: "string",
-      description: 'e.g. "Última Milla"',
-      initialValue: "Última Milla",
     }),
     defineField({
       name: "subtitle",

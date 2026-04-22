@@ -12,7 +12,6 @@ const serviceCardProjection = groq`{
 export const homePageQuery = groq`*[_type == "homePage"][0]{
   hero{
     title,
-    highlightedWord,
     subtitle,
     ctaLabel,
     ctaHref,
